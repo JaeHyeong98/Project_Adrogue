@@ -17,7 +17,7 @@ public class PoolManager : MonoBehaviour
         }
     }
 
-    public GameObject Get(int index)
+    public GameObject Get(int index, bool isRandom)
     {
         GameObject select = null;
 
@@ -37,25 +37,27 @@ public class PoolManager : MonoBehaviour
             pools[index].Add(select);
         }
 
-
-        float x = Random.Range(-15, 16);
-        float y;
-        if (Mathf.Abs(x)<10)
+        if(isRandom)
         {
-            y = Random.Range(-5, 6);
-            y = y < 0 ? y - 10 : y + 10;
-        }
-        else
-        {
-            y = Random.Range(-15, 16);
-            if(Mathf.Abs(y) < 10)
+            float x = Random.Range(-15, 16);
+            float y;
+            if (Mathf.Abs(x) < 10)
             {
-                x = Random.Range(-5, 6);
-                x = x < 0 ? x - 10 : x + 10;
+                y = Random.Range(-5, 6);
+                y = y < 0 ? y - 10 : y + 10;
             }
+            else
+            {
+                y = Random.Range(-15, 16);
+                if (Mathf.Abs(y) < 10)
+                {
+                    x = Random.Range(-5, 6);
+                    x = x < 0 ? x - 10 : x + 10;
+                }
+            }
+            Debug.Log("Enemy Spawn Position = " + x + ", " + y);
+            select.transform.localPosition = new Vector3(x, y, 0) + GameManager.instance.player.transform.position;
         }
-        Debug.Log("Enemy Spawn Position = " + x + ", " + y);
-        select.transform.localPosition = new Vector3(x, y, 0) + GameManager.instance.player.transform.position;
 
         return select;
     }
