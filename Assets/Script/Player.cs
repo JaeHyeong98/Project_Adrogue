@@ -12,12 +12,14 @@ public class Player : MonoBehaviour
     Rigidbody2D rigid;
     SpriteRenderer spriteR;
     Animator animator;
+    public Scanner scanner;
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         spriteR = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        scanner = GetComponent<Scanner>();
     }
 
     private void OnMove(InputValue value)

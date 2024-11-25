@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
@@ -7,6 +8,14 @@ public class Weapon : MonoBehaviour
     public float damage;
     public int count;
     public float speed;
+
+    float timer;
+    Player player;
+
+    private void Awake()
+    {
+        player = GetComponentInParent<Player>();
+    }
 
     private void Start()
     {
@@ -21,6 +30,15 @@ public class Weapon : MonoBehaviour
                 transform.Rotate(Vector3.forward * speed * Time.deltaTime);
                 break;
 
+            case 1:
+                timer += Time.deltaTime;
+
+                if(timer > speed)
+                {
+                    timer = 0;
+                    Fire();
+                }
+                break;
 
             default:
                 break;
@@ -30,15 +48,6 @@ public class Weapon : MonoBehaviour
         {
             LevelUp(11, 1);
         }
-    }
-
-    public void LevelUp(float damage, int count)
-    {
-        this.damage = damage;
-        this.count += count;
-
-        if (id == 0)
-            Batch();
     }
 
     public void Init()
@@ -52,6 +61,7 @@ public class Weapon : MonoBehaviour
                 break;
 
             case 1:
+                speed = 0.3f; // 발사 속도
                 break;
 
             case 2:
@@ -63,6 +73,14 @@ public class Weapon : MonoBehaviour
             default: 
                 break;
         }
+    }
+    public void LevelUp(float damage, int count)
+    {
+        this.damage = damage;
+        this.count += count;
+
+        if (id == 0)
+            Batch();
     }
 
     void Batch()
@@ -85,7 +103,23 @@ public class Weapon : MonoBehaviour
             bullet.Rotate(rotVec);
             bullet.Translate(bullet.up * 1.5f, Space.World);
 
-            bullet.GetComponent<Bullet>().Init(damage, -1);
+            bullet.GetComponent<Bullet>().Init(damage, -1,Vector3.zero);
         }
+    }
+
+    private void Fire()
+    {
+        if (player.scanner.nearestTarget == null)
+            return;
+
+        Vector3 targetPos = player.scanner.nearestTarget.position;
+        Vector3 dir = targetPos - transform.position;
+        dir = dir.normalized;
+
+        Transform bullet = GameManager.instance.pool.Get(prefabId,false).transform;
+        bullet.position = transform.position;
+
+        bullet.rotation = Quaternion.FromToRotation(Vector3.up, dir);
+        bullet.GetComponent<Bullet>().Init(damage, count, dir);
     }
 }
