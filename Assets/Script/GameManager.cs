@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public int level;
     public int kill;
     public int exp;
+    public int health = 100;
+    public int maxHealth = 100;
     public int[] nextExp = { 10, 20, 60, 100, 150, 210, 280, 360, 450, 600};
 
     [Header("# Game Object")]
@@ -21,7 +23,10 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        maxHealth = 100;
+        health = maxHealth;
     }
+
 
     private void Update()
     {
