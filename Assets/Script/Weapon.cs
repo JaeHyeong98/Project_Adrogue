@@ -14,12 +14,12 @@ public class Weapon : MonoBehaviour
 
     private void Awake()
     {
-        player = GetComponentInParent<Player>();
+        player = GameManager.instance.player;
     }
 
     private void Start()
     {
-        Init();
+        //Init();
     }
 
     private void Update()
@@ -50,8 +50,23 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    public void Init()
+    public void Init(ItemData data)
     {
+        //Basic Set
+        name = "Weapon " + data.itemId;
+        transform.parent = player.transform;
+        transform.localPosition = Vector3.zero;
+
+        //Property Set
+        id = data.itemId;
+        damage = data.baseDamage;
+        count = data.baseCount;
+
+        for(int i = 0; i< GameManager.instance.pool.prefabs.Length; i++) 
+        { 
+            
+        }
+
         switch(id)
         {
             case 0:

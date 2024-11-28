@@ -55,7 +55,7 @@ public class PoolManager : MonoBehaviour
                     x = x < 0 ? x - 10 : x + 10;
                 }
             }
-            Debug.Log("Enemy Spawn Position = " + x + ", " + y);
+
             select.transform.localPosition = new Vector3(x, y, 0) + GameManager.instance.player.transform.position;
         }
 
