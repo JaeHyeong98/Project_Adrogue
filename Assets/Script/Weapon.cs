@@ -64,7 +64,11 @@ public class Weapon : MonoBehaviour
 
         for(int i = 0; i< GameManager.instance.pool.prefabs.Length; i++) 
         { 
-            
+            if(data.projectile == GameManager.instance.pool.prefabs[i])
+            {
+                prefabId = i;
+                break;
+            }
         }
 
         switch(id)
@@ -78,17 +82,11 @@ public class Weapon : MonoBehaviour
             case 1:
                 speed = 0.3f; // 발사 속도
                 break;
-
-            case 2:
-                break;
-
-            case 3:
-                break;
-
-            default: 
-                break;
         }
+
+        player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }
+
     public void LevelUp(float damage, int count)
     {
         this.damage = damage;
@@ -96,6 +94,8 @@ public class Weapon : MonoBehaviour
 
         if (id == 0)
             Batch();
+
+        player.BroadcastMessage("ApplyGear",SendMessageOptions.DontRequireReceiver);
     }
 
     void Batch()

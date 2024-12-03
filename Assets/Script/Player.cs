@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     public Vector2 inputVec;
-    [SerializeField] private float speed = 2.3f;
+    public float speed = 2.3f;
     public bool isRight = true;
 
 
