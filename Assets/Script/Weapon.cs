@@ -83,6 +83,10 @@ public class Weapon : MonoBehaviour
                 speed = 0.3f; // 발사 속도
                 break;
         }
+        //hand set
+        Hand hand = player.hands[(int)data.itemType];
+        hand.spriter.sprite = data.hand;
+        hand.gameObject.SetActive(true);
 
         player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }
