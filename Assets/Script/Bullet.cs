@@ -35,6 +35,5 @@ public class Bullet : MonoBehaviour
             rigid.linearVelocity = Vector2.zero;
             gameObject.SetActive(false);
         }
-
     }
 }

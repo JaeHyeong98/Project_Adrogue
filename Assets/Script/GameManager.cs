@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,27 +15,66 @@ public class GameManager : MonoBehaviour
     public int level;
     public int kill;
     public int exp;
-    public int health = 100;
-    public int maxHealth = 100;
+    public float health = 100;
+    public float maxHealth = 100;
     public int[] nextExp = { 10, 20, 60, 100, 150, 210, 280, 360, 450, 600};
 
     [Header("# Game Object")]
     public PoolManager pool;
     public Player player;
     public LevelUp uiLevelUp;
+    public Result uiResulte;
+    public GameObject enemyCleaner;
 
     private void Awake()
     {
         instance = this;
-        isLive = true;
     }
 
-    private void Start()
+    public void GameStart()
     {
         maxHealth = 100;
         health = maxHealth;
-
         uiLevelUp.Select(0);
+        Resume();
+    }
+
+    public void GameOver()
+    {
+        StartCoroutine(GameOverCoroutine());
+    }
+
+    IEnumerator GameOverCoroutine()
+    {
+        isLive = false;
+
+        yield return new WaitForSeconds(0.5f);
+
+        uiResulte.gameObject.SetActive(true);
+        uiResulte.Lose();
+        Stop();
+    }
+
+    public void GameVictory()
+    {
+        StartCoroutine(GameVictoryCoroutine());
+    }
+
+    IEnumerator GameVictoryCoroutine()
+    {
+        isLive = false;
+        enemyCleaner.SetActive(true);
+
+        yield return new WaitForSeconds(0.5f);
+
+        uiResulte.gameObject.SetActive(true);
+        uiResulte.Win();
+        Stop();
+    }
+
+    public void GameRetry()
+    {
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 
 
@@ -46,11 +87,14 @@ public class GameManager : MonoBehaviour
         if(gameTime > maxGameTime)
         {
             gameTime = maxGameTime;
+            GameVictory();
         }
     }
 
     public void GetExp()
     {
+        if (!isLive) return;
+
         exp++;
 
         if(exp == nextExp[Mathf.Min(level, nextExp.Length - 1)])
