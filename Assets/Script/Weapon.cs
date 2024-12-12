@@ -60,8 +60,8 @@ public class Weapon : MonoBehaviour
 
         //Property Set
         id = data.itemId;
-        damage = data.baseDamage;
-        count = data.baseCount;
+        damage = data.baseDamage * Character.Damage;
+        count = data.baseCount + Character.Count;
 
         for(int i = 0; i< GameManager.instance.pool.prefabs.Length; i++) 
         { 
@@ -75,13 +75,13 @@ public class Weapon : MonoBehaviour
         switch(id)
         {
             case 0:
-                speed = -150; // 시계방향 회전을 위해 음수
+                speed = -150 * Character.WeaponSpeed; // 시계방향 회전을 위해 음수
                 Batch();
 
                 break;
 
             case 1:
-                speed = 0.3f; // 발사 속도
+                speed = 0.3f * Character.WeaponRate; // 발사 속도
                 break;
         }
         //hand set
@@ -94,7 +94,7 @@ public class Weapon : MonoBehaviour
 
     public void LevelUp(float damage, int count)
     {
-        this.damage = damage;
+        this.damage = damage * Character.Damage;
         this.count += count;
 
         if (id == 0)

@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public float maxGameTime = 20f;
 
     [Header("# Player Info")]
+    public int playerID;
     public int level;
     public int kill;
     public int exp;
@@ -31,11 +32,14 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
 
-    public void GameStart()
+    public void GameStart(int id)
     {
+        playerID = id;
         maxHealth = 100;
         health = maxHealth;
-        uiLevelUp.Select(0);
+
+        player.gameObject.SetActive(true);
+        uiLevelUp.Select(playerID % 2);
         Resume();
     }
 
